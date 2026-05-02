@@ -7,17 +7,17 @@ from Bot.orders import create_order_params
 from Bot.validators import validate_order
 from Bot.logging_config import setup_logging
 
-# 🔐 Load environment variables
+#  Load environment variables
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 API_SECRET = os.getenv("API_SECRET")
 
 
-# ✅ Pretty success output
+#  Pretty success output
 def print_success(response):
     print("\n" + "=" * 40)
-    print("✅ ORDER EXECUTED SUCCESSFULLY")
+    print(" ORDER EXECUTED SUCCESSFULLY")
     print("=" * 40)
     print(f"Order ID     : {response.get('orderId')}")
     print(f"Status       : {response.get('status')}")
@@ -26,10 +26,10 @@ def print_success(response):
     print("=" * 40 + "\n")
 
 
-# ❌ Pretty error output
+#  Pretty error output
 def print_error(response):
     print("\n" + "=" * 40)
-    print("❌ ORDER FAILED")
+    print(" ORDER FAILED")
     print("=" * 40)
     print(response)
     print("=" * 40 + "\n")
@@ -38,9 +38,9 @@ def print_error(response):
 def main():
     setup_logging()
 
-    # 🔴 Check if keys exist
+    #  Check if keys exist
     if not API_KEY or not API_SECRET:
-        print("❌ ERROR: API_KEY or API_SECRET not found in .env file")
+        print(" ERROR: API_KEY or API_SECRET not found in .env file")
         return
 
     parser = argparse.ArgumentParser(
@@ -57,7 +57,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        # ✅ Validation
+        #  Validation
         validate_order(
             args.symbol,
             args.side,
@@ -67,7 +67,7 @@ def main():
             args.stop_price
         )
 
-        # ✅ Create params
+        #  Create params
         params = create_order_params(
             args.symbol,
             args.side,
@@ -77,7 +77,7 @@ def main():
             args.stop_price
         )
 
-        # ✅ Confirmation UI
+        #  Confirmation UI
         print("\n🔍 ORDER SUMMARY")
         print(f"Symbol : {args.symbol}")
         print(f"Side   : {args.side}")
@@ -89,14 +89,14 @@ def main():
         confirm = input("\nProceed with order? (y/n): ")
 
         if confirm.lower() != "y":
-            print("❌ Order cancelled")
+            print(" Order cancelled")
             return
 
-        # ✅ API call
+        #  API call
         client = BinanceClient(API_KEY, API_SECRET)
         response = client.place_order(params)
 
-        # ✅ Output
+        #  Output
         if response and "orderId" in response:
             print_success(response)
         else:
